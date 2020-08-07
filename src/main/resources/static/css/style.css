@@ -1,0 +1,19 @@
+.badge {
+    border: none;
+}
+.center {
+    text-align: center;
+}
+#main {
+    margin-top: 50px;
+    max-width: 800px;
+}
+
+#searchForm {
+    margin-top: 50px;
+}
+
+#add-button {
+    margin-bottom: 30px;
+    margin-top: 30px;
+}
