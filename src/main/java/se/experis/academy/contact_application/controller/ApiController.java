@@ -62,7 +62,7 @@ public class ApiController {
      * @return list of contacts
      */
     @GetMapping("/contact/search")
-    public List<Contact> search(@RequestParam("query") String query) {
+    public List<Contact> search(@RequestParam(value = "query", defaultValue = "") String query) {
         return contactRepository.search(query.toLowerCase());
     }
 }

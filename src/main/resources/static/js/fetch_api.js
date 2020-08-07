@@ -1,25 +1,15 @@
 /* Global variables */
-let tableContent;
-let searchField;
-let searchForm;
-let addForm;
-let nameField;
-let emailField;
-let numberField;
-let editModal;
-let editForm;
+let tableContent, searchField, searchForm, addForm, nameField;
+let emailField, numberField, editModal, editForm, idField;
+let editName, editEmail, editNumber;
+
 const buttons = "<button class=\"btn btn-sm\" onclick=\"showEditContact(this)\">" +
                 "<span class=\"oi oi-pencil\" title=\"pencil\" aria-hidden=\"true\"></span></button>\n" +
                 "<button class=\"close\" onclick=\"deleteContact(this)\">x</button>";
 
 window.addEventListener("load", () => {
     /* Initialize the global variables.  */
-    tableContent = document.getElementById("tableContent");
-    searchField = document.getElementById("searchField");
-    searchForm = document.getElementById("searchForm");
-    addForm = document.getElementById("addForm");
-    editForm = document.getElementById("editForm");
-    editModal = document.getElementById('editModal');
+    initializeGlobal();
 
     /**
      * When the search field input is changed we call the API and reset the search field
@@ -37,7 +27,7 @@ window.addEventListener("load", () => {
     searchForm.addEventListener("submit", (event) => {
         event.preventDefault();
         searchHelper();
-        searchField.value = "";
+        resetFields(searchField);
     });
 
     /**
@@ -46,11 +36,8 @@ window.addEventListener("load", () => {
      */
     function searchHelper() {
         let searchValue = searchField.value;
-        if (searchValue.length) {
-            search(searchValue);
-        } else {
-            getAll();
-        }
+        if (searchValue.length) search(searchValue);
+        else getAll();
     }
 
     /**
@@ -58,13 +45,8 @@ window.addEventListener("load", () => {
      */
     addForm.addEventListener("submit", (event) => {
        event.preventDefault();
-       nameField = document.getElementById("name");
-       emailField = document.getElementById("email");
-       numberField = document.getElementById("contactNumber");
        addContact(nameField.value, emailField.value, numberField.value);
-       nameField.value = "";
-       emailField.value = "";
-       numberField.value = "";
+       resetFields(nameField, emailField, nameField);
        $('#addModal').modal('hide');
     });
 
@@ -73,34 +55,40 @@ window.addEventListener("load", () => {
      */
     editForm.addEventListener("submit", (event) => {
         event.preventDefault();
-        const idField = document.getElementById("idField");
-        const editName = document.getElementById("editName");
-        const editEmail = document.getElementById("editEmail");
-        const editNumber = document.getElementById("editContactNumber");
         editContact(idField.value, editName.value, editEmail.value, editNumber.value);
-        idField.value = "";
-        editName.value = "";
-        editEmail.value = "";
-        editNumber.value = "";
+        resetFields(idField, editName, editEmail, editNumber);
         $('#editModal').modal('hide');
     });
 });
+
+function resetFields(...args) {
+    args.forEach(argument => argument.value="");
+}
 
 /**
  * Opens up the edit modal and adds the contact info to the fields.
  * @param element
  */
 function showEditContact(element) {
-    let row = element.parentNode.parentNode;
-    let id = row.children[0].innerText;
-    let name = row.children[1].innerText;
-    let email = row.children[2].innerText;
-    let number = row.children[3].innerText;
+    setEditFields(element.parentNode.parentNode);
     $('#editModal').modal('show');
-    document.getElementById("idField").value = id;
-    document.getElementById("editName").value = name;
-    document.getElementById("editEmail").value = email;
-    document.getElementById("editContactNumber").value = number;
+}
+
+/**
+ * Helper function that sets the edit input fields
+ * @param row The row with contact info
+ */
+function setEditFields(row) {
+    document.getElementById("idField").value = row.children[0].innerText;
+    document.getElementById("editName").value = row.children[1].innerText;
+    document.getElementById("editEmail").value = row.children[2].innerText;
+    document.getElementById("editContactNumber").value = row.children[3].innerText;
+}
+
+function checkEmptyField(...args) {
+    for (let i = 0; i < args.length; i++)
+        if(args[i] === "") return true;
+    return false;
 }
 
 /**
@@ -111,7 +99,7 @@ function showEditContact(element) {
  * @param contactNumber
  */
 function editContact(id, name, email, contactNumber) {
-    if(id === "" ||name === "" || email === "" || contactNumber === "") return;
+    if(checkEmptyField(id, name, email, contactNumber)) return;
     let dataObject = { 'id': id, 'name': name, 'email': email, 'contactNumber': contactNumber };
     $.ajax({
         url: "http://localhost:8080/api/contact/update",
@@ -132,7 +120,7 @@ function editContact(id, name, email, contactNumber) {
  * @param contactNumber
  */
 function addContact(name, email, contactNumber) {
-    if(name === "" || email === "" || contactNumber === "") return;
+    if(checkEmptyField(id, email, contactNumber)) return;
     let dataObject = { 'name': name, 'email': email, 'contactNumber': contactNumber };
     $.ajax({
         url: "http://localhost:8080/api/contact/create",
@@ -157,7 +145,7 @@ function deleteContact(element) {
         url: "http://localhost:8080/api/contact/delete/"+id,
         type: 'DELETE',
         success: function() {
-            row.innerHTML = "";
+            row.parentNode.removeChild(row);
         },
         fail: (err) => console.log("Couldn't delete " + id, err)
     });
@@ -260,10 +248,26 @@ function generateRow(contact) {
     td_number.innerText = contact.contactNumber;
     td_actions.innerHTML = buttons;
     /* Add columns to row */
-    tr.appendChild(th_id);
-    tr.appendChild(td_name);
-    tr.appendChild(td_email);
-    tr.appendChild(td_number);
-    tr.appendChild(td_actions);
+    appendChildren(tr, th_id, td_name, td_email, td_number, td_actions);
     return tr;
+}
+
+function appendChildren(parent, ...children) {
+    children.forEach(child => parent.appendChild(child));
+}
+
+function initializeGlobal() {
+    tableContent = document.getElementById("tableContent");
+    searchField = document.getElementById("searchField");
+    searchForm = document.getElementById("searchForm");
+    addForm = document.getElementById("addForm");
+    editForm = document.getElementById("editForm");
+    editModal = document.getElementById('editModal');
+    idField = document.getElementById("idField");
+    editName = document.getElementById("editName");
+    editEmail = document.getElementById("editEmail");
+    editNumber = document.getElementById("editContactNumber");
+    nameField = document.getElementById("name");
+    emailField = document.getElementById("email");
+    numberField = document.getElementById("contactNumber");
 }
