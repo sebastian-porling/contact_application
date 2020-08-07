@@ -2,6 +2,9 @@ package se.experis.academy.contact_application.model;
 
 import javax.persistence.*;
 
+/**
+ * Representing a contact for the database and data object
+ */
 @Entity(name = "contacts")
 public class Contact {
 
@@ -22,6 +25,12 @@ public class Contact {
     @Column(name = "active", nullable = false)
     private boolean active = true ;
 
+    /**
+     * Constructor
+     * @param name
+     * @param email
+     * @param contactNumber
+     */
     public Contact(String name, String email, String contactNumber) {
         this.name = name;
         this.email = email;
