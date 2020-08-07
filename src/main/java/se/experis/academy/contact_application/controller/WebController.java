@@ -9,12 +9,20 @@ import se.experis.academy.contact_application.repository.ContactRepository;
 
 import java.util.List;
 
+/**
+ * Class that handles all the views
+ */
 @Controller
 public class WebController {
 
     @Autowired
     ContactRepository contactRepository;
 
+    /**
+     * Gets contacts and returns them to index.html
+     * @param model
+     * @return to index.html with list of contacts
+     */
     @GetMapping("/")
     public String index(Model model) {
         List<Contact> contacts = contactRepository.findByActiveTrue();
