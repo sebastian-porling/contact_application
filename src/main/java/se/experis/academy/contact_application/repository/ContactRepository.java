@@ -21,5 +21,5 @@ public interface ContactRepository extends CrudRepository<Contact, Integer> {
     @Override
     <S extends Contact> S save(S s);
 
-    List<Contact> findAllByNameContainingIgnoreCaseOrEmailContainingIgnoreCaseOrContactNumberContainingIgnoreCase(String name, String email, String contactNumber);
+    List<Contact> findAllByActiveTrueAndNameContainingIgnoreCaseOrEmailContainingIgnoreCaseOrContactNumberContainingIgnoreCase(String name, String email, String contactNumber);
 }

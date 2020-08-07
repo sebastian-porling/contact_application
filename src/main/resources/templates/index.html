@@ -21,11 +21,12 @@
     <div class="container" id="main">
         <h1 class="center">#Contact Application</h1>
 
+        <!-- Search field! -->
         <form id="searchForm">
             <div class="input-group mb-3">
                 <input id="searchField" type="text" class="form-control" placeholder="..." aria-label="Recipient's username" aria-describedby="button-addon2">
                 <div class="input-group-append">
-                    <button class="btn btn-success" type="button" id="button-addon2">search</button>
+                    <button class="btn btn-success" type="submit" id="button-addon2">search</button>
                 </div>
             </div>
         </form>
@@ -33,7 +34,7 @@
         <!-- Button trigger modal -->
         <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addModal" id="add-button">Add</button>
 
-        <!-- Modal -->
+        <!-- Add Modal -->
         <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
@@ -44,18 +45,18 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form>
+                        <form id="addForm">
                             <div class="form-group">
                                 <label for="name">Name: </label>
-                                <input type="text" class="form-control" id="name" placeholder="Enter name">
+                                <input type="text" class="form-control" id="name" placeholder="Enter name" required>
                             </div>
                             <div class="form-group">
                                 <label for="email">Email address</label>
-                                <input type="email" class="form-control" id="email" placeholder="Enter email">
+                                <input type="email" class="form-control" id="email" placeholder="Enter email" required>
                             </div>
                             <div class="form-group">
                                 <label for="contactNumber">Contact number: </label>
-                                <input type="text" class="form-control" id="contactNumber" placeholder="Enter contact number">
+                                <input type="text" class="form-control" id="contactNumber" placeholder="Enter contact number" required>
                             </div>
 
                             <div class="modal-footer">
@@ -64,11 +65,49 @@
                             </div>
                         </form>
                     </div>
-
                 </div>
             </div>
         </div>
 
+        <!-- Edit Modal -->
+        <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editModalTitle">Edit contact!</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="editForm">
+                            <div class="form-group">
+                                <label for="idField" hidden>Id: </label>
+                                <input type="text" class="form-control" id="idField" required hidden>
+                            </div>
+                            <div class="form-group">
+                                <label for="editName">Name: </label>
+                                <input type="text" class="form-control" id="editName" placeholder="Enter name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="editEmail">Email address</label>
+                                <input type="email" class="form-control" id="editEmail" placeholder="Enter email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="editContactNumber">Contact number: </label>
+                                <input type="text" class="form-control" id="editContactNumber" placeholder="Enter contact number" required>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Table with contacts! -->
         <table class="table">
             <thead>
             <tr>
@@ -85,10 +124,11 @@
                 <td th:text="${contact.name}"></td>
                 <td th:text="${contact.email}"></td>
                 <td th:text="${contact.contactNumber}"></td>
-                <th>
-                    <button class="btn btn-primary btn-sm" onclick="editContact()"><span class="oi oi-pencil" title="pencil" aria-hidden="true"></span></button>
-                    <button class="close" onclick="deleteContact()">x</button>
-                </th>
+                <!-- Row actions -->
+                <td>
+                    <button class="btn btn-primary btn-sm" onclick="showEditContact(this);"><span class="oi oi-pencil" title="pencil" aria-hidden="true"></span></button>
+                    <button class="close" onclick="deleteContact(this);">x</button>
+                </td>
             </tr>
             </tbody>
         </table>
