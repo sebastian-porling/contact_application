@@ -85,6 +85,12 @@ function setEditFields(row) {
     document.getElementById("editContactNumber").value = row.children[3].innerText;
 }
 
+function checkEmptyField(...args) {
+    for (let i = 0; i < args.length; i++)
+        if(args[i] === "") return true;
+    return false;
+}
+
 /**
  * Edits a contact on the database and replaces the one in the table if it exists
  * @param id
@@ -93,7 +99,7 @@ function setEditFields(row) {
  * @param contactNumber
  */
 function editContact(id, name, email, contactNumber) {
-    if(id === "" ||name === "" || email === "" || contactNumber === "") return;
+    if(checkEmptyField(id, name, email, contactNumber)) return;
     let dataObject = { 'id': id, 'name': name, 'email': email, 'contactNumber': contactNumber };
     $.ajax({
         url: "http://localhost:8080/api/contact/update",
@@ -114,7 +120,7 @@ function editContact(id, name, email, contactNumber) {
  * @param contactNumber
  */
 function addContact(name, email, contactNumber) {
-    if(name === "" || email === "" || contactNumber === "") return;
+    if(checkEmptyField(id, email, contactNumber)) return;
     let dataObject = { 'name': name, 'email': email, 'contactNumber': contactNumber };
     $.ajax({
         url: "http://localhost:8080/api/contact/create",
