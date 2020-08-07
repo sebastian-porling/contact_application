@@ -19,7 +19,7 @@ public class ApiController {
         return contactRepository.findByActiveTrue();
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/contact/delete/{id}")
     public void deleteContact(@PathVariable("id") int id) {
         if (contactRepository.existsById(id)){
             Contact contact = contactRepository.findById(id);
@@ -29,17 +29,18 @@ public class ApiController {
     }
 
     @PutMapping("/contact/create")
-    public void addContact(@RequestBody Contact contact) {
-        contactRepository.save(contact);
+    public Contact addContact(@RequestBody Contact contact) {
+        return contactRepository.save(contact);
     }
 
     @PutMapping("/contact/update")
-    public void updateContact(@RequestBody Contact contact) {
-        if (contactRepository.existsById(contact.getId())) contactRepository.save(contact);
+    public Contact updateContact(@RequestBody Contact contact) {
+        if (contactRepository.existsById(contact.getId())) return contactRepository.save(contact);
+        return new Contact();
     }
 
     @GetMapping("/contact/search")
     public List<Contact> search(@RequestParam("query") String query) {
-        return contactRepository.findAllByNameContainingIgnoreCaseOrEmailContainingIgnoreCaseOrContactNumberContainingIgnoreCase(query, query, query);
+        return contactRepository.findAllByActiveTrueAndNameContainingIgnoreCaseOrEmailContainingIgnoreCaseOrContactNumberContainingIgnoreCase(query, query, query);
     }
 }
