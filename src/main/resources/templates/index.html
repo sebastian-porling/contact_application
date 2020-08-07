@@ -126,7 +126,9 @@
                 <td th:text="${contact.contactNumber}"></td>
                 <!-- Row actions -->
                 <td>
-                    <button class="btn btn-primary btn-sm" onclick="showEditContact(this);"><span class="oi oi-pencil" title="pencil" aria-hidden="true"></span></button>
+                    <button class="btn btn-sm" onclick="showEditContact(this);">
+                        <span class="oi oi-pencil" title="pencil" aria-hidden="true"></span>
+                    </button>
                     <button class="close" onclick="deleteContact(this);">x</button>
                 </td>
             </tr>

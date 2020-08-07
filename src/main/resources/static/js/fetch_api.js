@@ -8,7 +8,7 @@ let emailField;
 let numberField;
 let editModal;
 let editForm;
-const buttons = "<button class=\"btn btn-primary btn-sm\" onclick=\"editContact(this)\">" +
+const buttons = "<button class=\"btn btn-sm\" onclick=\"showEditContact(this)\">" +
                 "<span class=\"oi oi-pencil\" title=\"pencil\" aria-hidden=\"true\"></span></button>\n" +
                 "<button class=\"close\" onclick=\"deleteContact(this)\">x</button>";
 
@@ -152,7 +152,7 @@ function addContact(name, email, contactNumber) {
  */
 function deleteContact(element) {
     let row = element.parentNode.parentNode;
-    let id = element.parentNode.parentNode.children[0].innerText;
+    let id = row.children[0].innerText;
     $.ajax({
         url: "http://localhost:8080/api/contact/delete/"+id,
         type: 'DELETE',
