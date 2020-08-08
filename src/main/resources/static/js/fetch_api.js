@@ -61,6 +61,10 @@ window.addEventListener("load", () => {
     });
 });
 
+/**
+ * Resets a input field
+ * @param args input fields
+ */
 function resetFields(...args) {
     args.forEach(argument => argument.value="");
 }
@@ -85,6 +89,11 @@ function setEditFields(row) {
     document.getElementById("editContactNumber").value = row.children[3].innerText;
 }
 
+/**
+ * Checks if any of the arguments are empty
+ * @param args any number of strings
+ * @returns {boolean} true if one is empty
+ */
 function checkEmptyField(...args) {
     for (let i = 0; i < args.length; i++)
         if(args[i] === "") return true;
@@ -120,7 +129,7 @@ function editContact(id, name, email, contactNumber) {
  * @param contactNumber
  */
 function addContact(name, email, contactNumber) {
-    if(checkEmptyField(id, email, contactNumber)) return;
+    if(checkEmptyField(name, email, contactNumber)) return;
     let dataObject = { 'name': name, 'email': email, 'contactNumber': contactNumber };
     $.ajax({
         url: "http://localhost:8080/api/contact/create",
@@ -252,10 +261,18 @@ function generateRow(contact) {
     return tr;
 }
 
+/**
+ * Appends the children to the parent
+ * @param parent HTML Element
+ * @param children and number of HTML elements.
+ */
 function appendChildren(parent, ...children) {
     children.forEach(child => parent.appendChild(child));
 }
 
+/**
+ * Initializes the global HTML elements
+ */
 function initializeGlobal() {
     tableContent = document.getElementById("tableContent");
     searchField = document.getElementById("searchField");
